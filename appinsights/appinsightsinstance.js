@@ -1,3 +1,4 @@
+var appInsightsConnectionString;
 $.ajax({
 	type: "GET",
 	url: Xrm.Utility.getGlobalContext().getClientUrl() + "/api/data/v9.2/environmentvariabledefinitions?$select=schemaname&$expand=environmentvariabledefinition_environmentvariablevalue($select=value)&$filter=schemaname eq 'ljr_AppInsightsConnectionString'",
@@ -19,7 +20,9 @@ $.ajax({
 			
 			// One To Many Relationships
 			for (var j = 0; j < result.environmentvariabledefinition_environmentvariablevalue.length; j++) {
-				var environmentvariabledefinition_environmentvariablevalue_value = result.environmentvariabledefinition_environmentvariablevalue[j]["value"]; // Multiline Text
+				appInsightsConnectionString = result.environmentvariabledefinition_environmentvariablevalue[j]["value"]; // Multiline Text
+				if(appInsightsConnectionString != null)
+					break;
 			}
 		}
 	},
