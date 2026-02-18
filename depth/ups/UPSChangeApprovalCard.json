@@ -1,0 +1,142 @@
+{
+    "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+    "type": "AdaptiveCard",
+    "version": "1.5",
+    "body": [
+        {
+            "type": "TextBlock",
+            "text": "Change Request Review",
+            "weight": "Bolder",
+            "size": "Large"
+        },
+        {
+            "type": "TextBlock",
+            "text": "Review the proposed changes below and approve or deny the request.",
+            "wrap": true,
+            "spacing": "Small"
+        },
+        {
+            "type": "ColumnSet",
+            "spacing": "Medium",
+            "columns": [
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "Before",
+                            "weight": "Bolder",
+                            "color": "Attention"
+                        },
+                        {
+                            "type": "FactSet",
+                            "facts": [
+                                {
+                                    "title": "Project Name",
+                                    "value": "@{body('UPS_JSON')?['depth_projectname']}"
+                                },
+                                {
+                                    "title": "Tier Number",
+                                    "value": "@{body('UPS_JSON')?['depth_tiernumber@OData.Community.Display.V1.FormattedValue']}"
+                                },
+                                {
+                                    "title": "Owning Department",
+                                    "value": "@{body('UPS_JSON')?['_depth_owningdepartment_value@OData.Community.Display.V1.FormattedValue']}"
+                                },
+                                {
+                                    "title": "Technical POC",
+                                    "value": "@{body('UPS_JSON')?['_depth_technicalpoc_value@OData.Community.Display.V1.FormattedValue']}"
+                                },
+                                {
+                                    "title": "Parent Project",
+                                    "value": "@{outputs('Get_Original_UPS')?['body/_depth_parentproject_value']}"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "Column",
+                    "width": "stretch",
+                    "items": [
+                        {
+                            "type": "TextBlock",
+                            "text": "After",
+                            "weight": "Bolder",
+                            "color": "Good"
+                        },
+                        {
+                            "type": "FactSet",
+                            "facts": [
+                                {
+                                    "title": "Project Name",
+                                    "value": "@{body('UPS_Change_JSON')?['depth_projectname']}"
+                                },
+                                {
+                                    "title": "Tier Number",
+                                    "value": "@{body('UPS_Change_JSON')?['depth_tiernumber@OData.Community.Display.V1.FormattedValue']}"
+                                },
+                                {
+                                    "title": "Owning Department",
+                                    "value": "@{body('UPS_Change_JSON')?['_depth_owningdepartment_value@OData.Community.Display.V1.FormattedValue']}"
+                                },
+                                {
+                                    "title": "Technical POC",
+                                    "value": "@{body('UPS_Change_JSON')?['_depth_technicalpoc_value@OData.Community.Display.V1.FormattedValue']}"
+                                },
+                                {
+                                    "title": "Parent Project",
+                                    "value": "@{outputs('Get_Original_UPS')?['body/_depth_parentproject_value']}"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "TextBlock",
+            "text": "Reason for Change",
+            "weight": "Bolder",
+            "spacing": "Medium"
+        },
+        {
+            "type": "TextBlock",
+            "text": "@{outputs('Get_UPS_Change')?['body/depth_reasonforchange']}",
+            "wrap": true
+        },
+        {
+            "type": "TextBlock",
+            "text": "Approval Notes (required)",
+            "weight": "Bolder",
+            "spacing": "Medium"
+        },
+        {
+            "type": "Input.Text",
+            "id": "approvalNotes",
+            "isMultiline": true,
+            "isRequired": true,
+            "placeholder": "Provide approval or denial rationale.",
+            "errorMessage": "Approval notes are required."
+        }
+    ],
+    "actions": [
+        {
+            "type": "Action.Submit",
+            "title": "Approve",
+            "style": "positive",
+            "data": {
+                "decision": "Approve"
+            }
+        },
+        {
+            "type": "Action.Submit",
+            "title": "Deny",
+            "style": "destructive",
+            "data": {
+                "decision": "Deny"
+            }
+        }
+    ]
+}
