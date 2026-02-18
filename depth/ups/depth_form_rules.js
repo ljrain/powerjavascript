@@ -30,18 +30,18 @@ DEPTH.Form = DEPTH.Form || {};
   // Section hide rule (use TAB/SECTION *Name* properties from form designer, not the label text)
   DEPTH.Form.TARGET_TAB = "general";
   DEPTH.Form.TARGET_SECTION = "general_childprojects";
-  DEPTH.Form.HIDE_SECTION_WHEN_TIER_LABEL = "Tier II";
+  DEPTH.Form.SHOW_SECTION_WHEN_TIER_VALUE = 545630001; // Tier II numeric value
  
   // Parent Project visibility rule
   // Field control/attribute schema name for Parent Project lookup
   DEPTH.Form.PARENT_PROJECT_FIELD = "depth_parentproject";
- 
-  // Show Parent Project when Tier indicates "Tier 1"
+
+  // Show Parent Project when Tier indicates "Tier II"
   // - Numeric match is best when Tier is a Whole Number or Choice returning a numeric value.
-  DEPTH.Form.SHOW_PARENT_PROJECT_TIER_VALUES = [1];
- 
+  DEPTH.Form.SHOW_PARENT_PROJECT_TIER_VALUES = [545630001]; // Tier II
+
   // - Label match is best when Tier is a Choice/OptionSet and you prefer comparing text.
-  DEPTH.Form.SHOW_PARENT_PROJECT_TIER_LABELS = ["Tier 1", "Tier I"];
+  DEPTH.Form.SHOW_PARENT_PROJECT_TIER_LABELS = ["Tier II", "Tier 2"];
  
   // Optional: clear Parent Project when hidden
   DEPTH.Form.CLEAR_PARENT_PROJECT_WHEN_HIDDEN = false;
@@ -218,27 +218,28 @@ DEPTH.Form = DEPTH.Form || {};
     } catch (e) { /* ignore */ }
   };
  
-  // Rule 2: Hide ChildProjects section when Tier = Tier II
+  // Rule 2: Show ChildProjects section only when Tier = Tier II (545630001)
   DEPTH.Form.applyTierSectionRule = function (formContext) {
     try {
-      var tierLabel = DEPTH.Form.getTierLabel(formContext);
-      var hide = false;
- 
-      if (tierLabel && String(tierLabel).trim() === DEPTH.Form.HIDE_SECTION_WHEN_TIER_LABEL) {
-        hide = true;
+      var tierValue = DEPTH.Form.getTierValue(formContext);
+      var show = false;
+
+      // Show section only when Tier is set to Tier II (545630001)
+      if (tierValue !== null && tierValue !== undefined && tierValue === DEPTH.Form.SHOW_SECTION_WHEN_TIER_VALUE) {
+        show = true;
       }
- 
-      // Hide/show the whole section
+
+      // Show/hide the whole section
       DEPTH.Form.setSectionVisible(
         formContext,
         DEPTH.Form.TARGET_TAB,
         DEPTH.Form.TARGET_SECTION,
-        !hide
+        show
       );
     } catch (e) { /* ignore */ }
   };
  
-  // Rule 3: Parent Project visible ONLY when Tier indicates Tier 1
+  // Rule 3: Parent Project visible ONLY when Tier indicates Tier II (545630001)
   DEPTH.Form.applyParentProjectVisibilityRule = function (formContext) {
     try {
       var tierValue = DEPTH.Form.getTierValue(formContext);
