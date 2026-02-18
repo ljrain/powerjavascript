@@ -30,7 +30,7 @@ DEPTH.Form = DEPTH.Form || {};
   // Section hide rule (use TAB/SECTION *Name* properties from form designer, not the label text)
   DEPTH.Form.TARGET_TAB = "general";
   DEPTH.Form.TARGET_SECTION = "general_childprojects";
-  DEPTH.Form.SHOW_SECTION_WHEN_TIER_VALUE = 545630000; // Tier I numeric value
+  DEPTH.Form.HIDE_SECTION_WHEN_TIER_VALUE = 545630001; // Tier II numeric value - Child Projects should NOT be visible for Tier II
  
   // Parent Project visibility rule
   // Field control/attribute schema name for Parent Project lookup
@@ -218,15 +218,19 @@ DEPTH.Form = DEPTH.Form || {};
     } catch (e) { /* ignore */ }
   };
  
-  // Rule 2: Show ChildProjects section only when Tier = Tier I (545630000)
+  // Rule 2: Hide ChildProjects section when Tier = Tier II (545630001)
   DEPTH.Form.applyTierSectionRule = function (formContext) {
     try {
       var tierValue = DEPTH.Form.getTierValue(formContext);
-      var show = false;
+      var show = true; // Default to showing the section
 
-      // Show section only when Tier is set to Tier I (545630000)
-      if (tierValue !== null && tierValue !== undefined && tierValue === DEPTH.Form.SHOW_SECTION_WHEN_TIER_VALUE) {
-        show = true;
+      // Hide section when Tier is set to Tier II (545630001)
+      // Convert to number to ensure proper comparison
+      var tierNum = (tierValue !== null && tierValue !== undefined) ? Number(tierValue) : null;
+      var hideWhenTier = Number(DEPTH.Form.HIDE_SECTION_WHEN_TIER_VALUE);
+      
+      if (tierNum !== null && !isNaN(tierNum) && tierNum === hideWhenTier) {
+        show = false;
       }
 
       // Show/hide the whole section
