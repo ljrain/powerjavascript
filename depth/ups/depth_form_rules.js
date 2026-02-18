@@ -28,7 +28,7 @@ DEPTH.Form = DEPTH.Form || {};
   DEPTH.Form.TIER_FIELD = "depth_tiernumber";
  
   // Section hide rule (use TAB/SECTION *Name* properties from form designer, not the label text)
-  DEPTH.Form.TARGET_TAB = "general";
+  DEPTH.Form.TARGET_TAB = "General";
   DEPTH.Form.TARGET_SECTION = "general_childprojects";
   DEPTH.Form.HIDE_SECTION_WHEN_TIER_VALUE = 545630001; // Tier II numeric value - Child Projects should NOT be visible for Tier II
  
